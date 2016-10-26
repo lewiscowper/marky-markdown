@@ -327,6 +327,10 @@ document.querySelectorAll(query).forEach(function (element) {
   element.addEventListener('change', render)
 })
 
+document.getElementById('clear-editor').addEventListener('click', function (e) {
+  editor.setValue('')
+})
+
 function isChecked (id) {
   return document.getElementById(id).checked
 }
