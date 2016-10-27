@@ -89,7 +89,7 @@ header h1 {
 }
 
 #editor-container pre.ace_editor { margin-top: 0; }
-#output-container.source { background-color: #f7f7f7; }
+#output-container.source, #output-container.debug { background-color: #f7f7f7; }
 </style>
 </head>
 <body>
@@ -350,20 +350,37 @@ function buildOptions () {
 
 function render () {
   var options = buildOptions()
-  var html = markyMarkdown(editor.getValue(), buildOptions())
+  var html = markyMarkdown(editor.getValue(), options)
   var outputTypeElements = document.getElementsByName('outputType')
   var viewTypes = Array.prototype.slice.call(outputTypeElements)
   var viewType = viewTypes.filter(function (e) { return e.checked })[0].value
+  var paragraph
 
   document.getElementById('output-container').className = viewType
 
   if (viewType === 'source') {
-    var paragraph = document.createElement('p')
+    paragraph = document.createElement('p')
     paragraph.appendChild(document.createTextNode(html))
     document.getElementById('output').innerHTML = '<pre><code class="html">' + paragraph.innerHTML + '</code></pre>'
     document.querySelectorAll('#output pre code').forEach(function(e){ hljs.highlightBlock(e) })
 
   } else if (viewType === 'debug') {
+    if (markyMarkdown.getParser) {
+      var parser = markyMarkdown.getParser(options)
+      var parserState
+      parser.use(function (md,options) {
+        md.core.ruler.push('debugger', function(state){
+          parserState = state
+        })
+      })
+      parser.render(editor.getValue())
+      var debugInfo = JSON.stringify(parserState.tokens, null, '  ')
+      paragraph = document.createElement('p')
+      paragraph.appendChild(document.createTextNode(debugInfo))
+      document.getElementById('output').innerHTML = '<pre>' + paragraph.innerHTML + '</pre>'
+    } else {
+      document.getElementById('output').innerHTML = '<em>Selected version of marky-markdown does not have the debugging features necessary to make the debug view work. :(</em>'
+    }
 
   } else if (viewType === 'html') {
     document.getElementById('output').innerHTML = html

@@ -9,17 +9,7 @@ var marky = module.exports = function (markdown, options) {
     throw Error('first argument must be a string')
   }
 
-  options = options || {}
-  defaults(options, {
-    sanitize: true,
-    linkify: true,
-    highlightSyntax: true,
-    prefixHeadingIds: true,
-    enableHeadingLinkIcons: true,
-    serveImagesWithCDN: false,
-    debug: false,
-    package: null
-  })
+  defaults(options || {}, defaultOptions)
 
   var log = function (msg) {
     if (options.debug) {
@@ -42,4 +32,19 @@ var marky = module.exports = function (markdown, options) {
 
 marky.parsePackageDescription = function (description) {
   return sanitize(render.renderPackageDescription(description))
+}
+
+marky.getParser = function (options) {
+  return render.getParser(defaults(options || {}, defaultOptions))
+}
+
+var defaultOptions = marky.defaultOptions = {
+  sanitize: true,
+  linkify: true,
+  highlightSyntax: true,
+  prefixHeadingIds: true,
+  enableHeadingLinkIcons: true,
+  serveImagesWithCDN: false,
+  debug: false,
+  package: null
 }
