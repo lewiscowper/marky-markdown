@@ -38,7 +38,7 @@ marky.getParser = function (options) {
   return render.getParser(defaults(options || {}, defaultOptions))
 }
 
-var defaultOptions = marky.defaultOptions = {
+var defaultOptions = {
   sanitize: true,
   linkify: true,
   highlightSyntax: true,
