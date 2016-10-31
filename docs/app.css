@@ -8,7 +8,7 @@ body {
 header {
   margin: 0;
   padding: 0 0 .5rem 0;
-  flex: 0;
+  flex: none;
 }
 header h1 {
   background-color: #557;
