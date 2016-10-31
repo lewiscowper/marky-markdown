@@ -24,6 +24,10 @@ header h1 {
   font-size: .85rem;
 }
 
+#options label {
+  white-space: nowrap;
+}
+
 #options input[type=checkbox] {
   margin-left: 1em;
 }
