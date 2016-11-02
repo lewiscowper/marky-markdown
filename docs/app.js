@@ -86,13 +86,13 @@ function escapeText (text) {
 }
 
 function useMarkyVersion (version) {
+  if ('markyMarkdown' in window) { delete window.markyMarkdown }
+
   var head = document.getElementsByTagName('head')[0]
   var scripts = document.querySelectorAll('head script.marky-markdown')
   for (var i = 0; i < scripts.length; i++) {
     head.removeChild(scripts[i])
   }
-
-  delete window.markyMarkdown
 
   var scriptElement = document.createElement('script')
   scriptElement.onload = render
@@ -122,8 +122,9 @@ function setupEditor (id) {
 }
 
 function setupEvents (editor) {
-  var versionSelector = document.getElementById('version')
-  versionSelector.addEventListener('change', function (e) { useMarkyVersion(this.value) })
+  document.getElementById('veresion').addEventListener('change', function (e) {
+    useMarkyVersion(this.value)
+  })
 
   var optionsQuery = 'header input[type=checkbox], #version, #packageContents, input[name=outputType]'
   document.querySelectorAll(optionsQuery).forEach(function (element) {
